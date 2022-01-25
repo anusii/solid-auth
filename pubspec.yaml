@@ -1,7 +1,7 @@
 name: solid_auth
 description: Authentication library for SOLID servers
 version: 0.1.0
-homepage:
+homepage: https://github.com/anusii/solid_auth
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
