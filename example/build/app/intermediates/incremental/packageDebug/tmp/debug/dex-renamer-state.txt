@@ -1,0 +1,4 @@
+#Wed Jan 26 08:14:24 AEDT 2022
+base.0=D\:\\EDUCATION\\POSTDOC @ ANU\\Research\\SOLID server\\applications\\solid_auth\\example\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

@@ -1,0 +1,162 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.fluttersolidauth"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="20"
+9        android:targetSdkVersion="30" />
+10    <!--
+11         Flutter needs it to communicate with the running application
+12         to allow setting breakpoints, to provide hot reload, etc.
+13    -->
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:3:5-67
+14-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:3:22-64
+15    <!-- <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/> -->
+16    <queries>
+16-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:5:5-22:14
+17
+18        <!-- If your app opens https URLs -->
+19        <intent>
+19-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:7:7-11:16
+20            <action android:name="android.intent.action.VIEW" />
+20-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:8:9-61
+20-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:8:17-58
+21
+22            <category android:name="android.intent.category.BROWSABLE" />
+22-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:9:9-70
+22-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:9:19-67
+23
+24            <data android:scheme="https" />
+24-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:9-40
+24-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:15-37
+25        </intent>
+26        <!-- If your app makes calls -->
+27        <intent>
+27-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:13:7-16:16
+28            <action android:name="android.intent.action.DIAL" />
+28-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:14:9-61
+28-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:14:17-58
+29
+30            <data android:scheme="tel" />
+30-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:9-40
+30-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:15-37
+31        </intent>
+32        <!-- If your app emails -->
+33        <intent>
+33-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:18:7-21:16
+34            <action android:name="android.intent.action.SEND" />
+34-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:19:9-61
+34-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:19:17-58
+35
+36            <data android:mimeType="*/*" />
+36-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:9-40
+37        </intent>
+38    </queries>
+39
+40    <application
+40-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:23:4-68:19
+41        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+41-->[androidx.core:core:1.6.0] C:\Users\Anushka\.gradle\caches\transforms-2\files-2.1\5f663b08eec19eef9a9d1af662d9025e\core-1.6.0\AndroidManifest.xml:24:18-86
+42        android:debuggable="true"
+43        android:icon="@mipmap/ic_launcher"
+43-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:26:9-43
+44        android:label="fluttersolidauth"
+44-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:25:9-41
+45        android:usesCleartextTraffic="true" >
+45-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:24:9-44
+46        <activity
+46-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:27:9-62:20
+47            android:name="com.example.fluttersolidauth.MainActivity"
+47-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:28:13-41
+48            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+48-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:31:13-163
+49            android:hardwareAccelerated="true"
+49-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:32:13-47
+50            android:launchMode="singleTop"
+50-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:29:13-43
+51            android:theme="@style/LaunchTheme"
+51-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:30:13-47
+52            android:windowSoftInputMode="adjustResize" >
+52-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:33:13-55
+53
+54            <!--
+55                 Specifies an Android theme to apply to this Activity as soon as
+56                 the Android process has started. This theme is visible to the user
+57                 while the Flutter UI initializes. After that, this theme continues
+58                 to determine the Window background behind the Flutter UI.
+59            -->
+60            <meta-data
+60-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:38:13-41:17
+61                android:name="io.flutter.embedding.android.NormalTheme"
+61-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:39:15-70
+62                android:resource="@style/NormalTheme" />
+62-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:40:15-52
+63            <!--
+64                 Displays an Android View that continues showing the launch screen
+65                 Drawable until Flutter paints its first frame, then this splash
+66                 screen fades out. A splash screen is useful to avoid any visual
+67                 gap between the end of Android's launch screen and the painting of
+68                 Flutter's first frame.
+69            -->
+70            <meta-data
+70-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:47:13-50:17
+71                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+71-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:48:15-79
+72                android:resource="@drawable/launch_background" />
+72-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:49:15-61
+73
+74            <intent-filter>
+74-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:51:13-54:29
+75                <action android:name="android.intent.action.MAIN" />
+75-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:52:17-68
+75-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:52:25-66
+76
+77                <category android:name="android.intent.category.LAUNCHER" />
+77-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:53:17-76
+77-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:53:27-74
+78            </intent-filter>
+79            <intent-filter>
+79-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:55:13-61:29
+80                <action android:name="android.intent.action.VIEW" />
+80-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:8:9-61
+80-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:8:17-58
+81
+82                <category android:name="android.intent.category.DEFAULT" />
+82-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:57:17-76
+82-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:57:27-73
+83                <category android:name="android.intent.category.BROWSABLE" />
+83-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:9:9-70
+83-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:9:19-67
+84                <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
+85                <data
+85-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:9-40
+86                    android:host="callback"
+87                    android:scheme="com.example.solidauth" />
+87-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:10:15-37
+88            </intent-filter>
+89        </activity>
+90        <!--
+91             Don't delete the meta-data below.
+92             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+93        -->
+94        <meta-data
+94-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:65:9-67:33
+95            android:name="flutterEmbedding"
+95-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:66:13-44
+96            android:value="2" />
+96-->D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\android\app\src\main\AndroidManifest.xml:67:13-30
+97
+98        <activity
+98-->[:url_launcher_android] D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+99            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+99-->[:url_launcher_android] D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
+100            android:exported="false"
+100-->[:url_launcher_android] D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+101            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+101-->[:url_launcher_android] D:\EDUCATION\POSTDOC @ ANU\Research\SOLID server\applications\solid_auth\example\build\url_launcher_android\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+102    </application>
+103
+104</manifest>
