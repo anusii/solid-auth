@@ -8,6 +8,11 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  pointycastle: ^3.5.0
+  http: ^0.13.4
+  convert: ^3.0.1
+  collection: ^1.15.0
+  crypto: ^3.0.1
   url_launcher: ^6.0.10
   jwt_decoder: ^2.0.1
   jose: ^0.3.2
