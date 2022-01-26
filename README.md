@@ -32,7 +32,7 @@ start using the package. -->
 
 ## Usage
 
-To use this package add `solid_auth` as a dependency in your `pubspec.yaml` file.
+To use this package add `solid_auth` as a dependency in your `pubspec.yaml` file. An example project that uses `solid_auth` can be found [here](https://github.com/anusii/solid_auth/tree/main/example).
 
 ### Authentication Example
 
@@ -94,7 +94,7 @@ String dPopToken = genDpopToken(endPointUrl, rsaKeyPair,
 
 ## Additional information
 
-The source code can be accessed via [GitHub repository](). You can also file issues you face in GitHub.
+The source code can be accessed via [GitHub repository](https://github.com/anusii/solid_auth). You can also file issues you face in GitHub.
 
 <!-- TODO: Tell users more about the package: where to find more information, how to 
 contribute to the package, how to file issues, what response they can expect 
