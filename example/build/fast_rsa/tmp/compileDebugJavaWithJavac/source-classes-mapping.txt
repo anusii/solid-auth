@@ -1,2 +1,0 @@
-dev/jerson/fast_rsa/BuildConfig.java
- dev.jerson.fast_rsa.BuildConfig

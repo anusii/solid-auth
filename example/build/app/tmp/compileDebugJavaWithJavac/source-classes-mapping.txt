@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/example/fluttersolidauth/BuildConfig.java
- com.example.fluttersolidauth.BuildConfig
