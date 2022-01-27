@@ -1,6 +1,6 @@
 name: solid_auth
 description: Authentication library for SOLID servers
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/anusii/solid_auth
 
 environment:
@@ -37,7 +37,10 @@ dev_dependencies:
 flutter:
 
   # To add assets to your package, add an assets section, like this:
-  # assets:
+  assets:
+    - packages/fast_rsa/web/assets/worker.js
+    - packages/fast_rsa/web/assets/wasm_exec.js
+    - packages/fast_rsa/web/assets/rsa.wasm
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   #

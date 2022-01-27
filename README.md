@@ -56,7 +56,7 @@ final List<String> _scopes = <String>[
 // Authentication process for the POD issuer
 var authData = await authenticate(Uri.parse(_issuerUri), _scopes);
 
-// Decode access token to get the correct webId
+// Decode access token to recheck the WebID
 String accessToken = authData['accessToken'];
 Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
 String webId = decodedToken['webid'];
@@ -81,20 +81,19 @@ Future<String> profilePage = await fetchProfileData(_myWebId);
 ```dart
 import 'package:solid_auth/solid_auth.dart';
 
-String endPointUrl; // The url of the resource that is being requested
+String endPointUrl; // The URL of the resource that is being requested
 KeyPair rsaKeyPair; // Public/private key pair (RSA)
 dynamic publicKeyJwk; // JSON web key of the public key
 String httpMethod; // Http method to be used (eg: POST, PATCH)
 
 // Generate DPoP token
-String dPopToken = genDpopToken(endPointUrl, rsaKeyPair, 
-                                publicKeyJwk, httpMethod);
+String dPopToken = genDpopToken(endPointUrl, rsaKeyPair, publicKeyJwk, httpMethod);
 
 ```
 
 ## Additional information
 
-The source code can be accessed via [GitHub repository](https://github.com/anusii/solid_auth). You can also file issues you face in GitHub.
+The source code can be accessed via [GitHub repository](https://github.com/anusii/solid_auth). You can also file issues you face at [GitHub Issues](https://github.com/anusii/solid_auth/issues).
 
 <!-- TODO: Tell users more about the package: where to find more information, how to 
 contribute to the package, how to file issues, what response they can expect 
