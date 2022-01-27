@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   jaguar_jwt: ^3.0.0
   dart_jsonwebtoken: ^2.3.2
+  fast_rsa: ^3.0.3
   solid_auth: ^0.1.0
   flutter:
     sdk: flutter
@@ -60,6 +61,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - packages/fast_rsa/web/assets/worker.js
+    - packages/fast_rsa/web/assets/wasm_exec.js
+    - packages/fast_rsa/web/assets/rsa.wasm
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

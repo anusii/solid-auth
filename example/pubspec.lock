@@ -107,7 +107,7 @@ packages:
     source: hosted
     version: "1.2.0"
   fast_rsa:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: fast_rsa
       url: "https://pub.dartlang.org"
