@@ -31,3 +31,20 @@ flutter pub get
 ### Running the app on web or mobile
 
 After all the required packages are imported, then first select the device you want the app to run. Then run the app by pressing `CTRL + F5`.
+
+To access public data of a POD input the WebID into the text area and click `READ PUBLIC INFO` button.
+
+<center> <img src="assets/images/public_data.gif" alt="public data" height="600"> </center>
+<br/>
+
+To login input the SOLID POD provider URL into the text area and click `LOGIN` button. After login you can edit the profile data.
+
+<center> <img src="assets/images/login.gif" alt="public data" height="600"> </center>
+<br/>
+
+<center> <img src="assets/images/edit_data.gif" alt="public data" height="600"> </center>
+<br/>
+
+To logout simply click the `LOGOUT` button.
+
+<center> <img src="assets/images/logout.gif" alt="public data" height="600"> </center>
