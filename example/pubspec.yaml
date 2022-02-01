@@ -27,7 +27,7 @@ dependencies:
   jaguar_jwt: ^3.0.0
   dart_jsonwebtoken: ^2.3.2
   fast_rsa: ^3.0.3
-  solid_auth: ^0.1.0
+  solid_auth: ^0.1.1
   flutter:
     sdk: flutter
 

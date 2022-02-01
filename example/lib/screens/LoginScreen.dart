@@ -174,7 +174,7 @@ class LoginScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () => launchIssuerReg((getIssuer(_webIdTextController.text)).toString()),
+            onPressed: () async => launchIssuerReg((await getIssuer(_webIdTextController.text)).toString()),
             child: Text('GET A POD',
             style: TextStyle(
               color: titleAsh,

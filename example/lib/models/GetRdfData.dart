@@ -95,9 +95,6 @@ class PodProfile {
     var rdfRes = divideRdfData(profileRdfStr);
     List<String> rdfDataList = rdfRes[0];
     String vcardPrefix = rdfRes[1];
-    String foafPrefix = rdfRes[2];
-    print(vcardPrefix);
-    print(foafPrefix);
     for (var i = 0; i < rdfDataList.length; i++) {
       String dataItem = rdfDataList[i];
       if(dataItem.contains(vcardPrefix+'fn')){
