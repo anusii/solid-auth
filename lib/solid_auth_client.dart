@@ -16,13 +16,13 @@ Future<String> clientDynamicReg(String regEndPoint, List reidirUrlList, String a
     },
     body: json.encode({
       "application_type": "web",
-      "client_name": "fluttersolidauth",
-      "id_token_signed_response_alg": "RS256",
+      //"client_name": "fluttersolidauth",
+      //"id_token_signed_response_alg": "RS256",
       "redirect_uris": reidirUrlList,
-      "subject_type": "pairwise",
+      //"subject_type": "pairwise",
       "token_endpoint_auth_method": authMethod,
-      "userinfo_encrypted_response_alg": "RSA1_5",
-      "userinfo_encrypted_response_enc": "A128CBC-HS256",
+      //"userinfo_encrypted_response_alg": "RSA1_5",
+      //"userinfo_encrypted_response_enc": "A128CBC-HS256",
     }));
 
   if (response.statusCode == 201) {

@@ -10,6 +10,7 @@ import 'package:fluttersolidauth/models/Constants.dart';
 import 'package:fluttersolidauth/screens/PrivateScreen.dart';
 import 'package:fluttersolidauth/screens/PublicScreen.dart';
 //import 'package:fluttersolidauth/models/RestAPI.dart';
+//import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
