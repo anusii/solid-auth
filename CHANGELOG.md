@@ -12,3 +12,7 @@ Initial version of the package
 
 * Updates to the package to be compatible with Community Solid Server (CSS) 3.0
 * Updates to the example project in main repository
+
+### 0.1.3
+
+* Community Solid Server (CSS) 3.0 redirect URL bug fix
