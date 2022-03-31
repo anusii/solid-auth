@@ -166,7 +166,7 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
     /// Create a function to open a browser with an url
     urlLauncher(String url) async {
       if (await canLaunch(url)) {
-        await launch(url, forceWebView: true);
+        await launch(url, forceWebView: true, enableJavaScript: true);
       } else {
         throw 'Could not launch $url';
       }
@@ -227,18 +227,31 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
 }
 
 /// Logout function
-Future<void> logout(_logoutUrl) async {
-  if (currPlatform.isWeb()) {
-    authManager.userLogout(_logoutUrl);
-  }
-  else{
-    if (await canLaunch(_logoutUrl)) {
-      await launch(_logoutUrl, forceWebView: true);
-    } else {
-      throw 'Could not launch $_logoutUrl';
-    }
-    await Future.delayed(Duration(seconds: 2));
-    closeWebView();
-  }
+// Future<void> logout(_logoutUrl) async {
+//   if (currPlatform.isWeb()) {
+//     authManager.userLogout(_logoutUrl);
+//   }
+//   else{
+//     if (await canLaunch(_logoutUrl)) {
+//       await launch(_logoutUrl, forceWebView: true);
+//     } else {
+//       throw 'Could not launch $_logoutUrl';
+//     }
+//     await Future.delayed(Duration(seconds: 2));
+//     closeWebView();
+//   }
   
+// }
+
+Future<bool> logout(_logoutUrl) async {
+    
+  if (await canLaunch(_logoutUrl)) {
+    await launch(_logoutUrl, forceWebView: true);
+  } else {
+    throw 'Could not launch $_logoutUrl';
+  }
+
+  await Future.delayed(Duration(seconds: 4));
+  closeWebView();
+  return true;
 }
