@@ -1,5 +1,8 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:collection/collection.dart';
 
 import 'algorithms.dart';
 import 'errors.dart';
@@ -20,15 +23,15 @@ class JWT {
     bool checkHeaderType = true,
     bool checkExpiresIn = true,
     bool checkNotBefore = true,
-    Duration issueAt,
-    String audience,
-    String subject,
-    String issuer,
-    String jwtId,
+    Duration? issueAt,
+    Audience? audience,
+    String? subject,
+    String? issuer,
+    String? jwtId,
   }) {
     try {
       final parts = token.split('.');
-      final Map<String, dynamic> header = jsonBase64.decode(base64Padded(parts[0]));
+      final header = jsonBase64.decode(base64Padded(parts[0]));
 
       if (header == null || header is! Map<String, dynamic>) {
         throw JWTInvalidError('invalid header');
@@ -91,7 +94,15 @@ class JWT {
 
         // aud
         if (audience != null) {
-          if (!payload.containsKey('aud') || payload['aud'] != audience) {
+          if (payload.containsKey('aud')) {
+            if (payload['aud'] is String && payload['aud'] != audience.first) {
+              throw JWTInvalidError('invalid audience');
+            } else if (payload['aud'] is List &&
+                !ListEquality().equals(payload['aud'], audience)) {
+              throw JWTInvalidError('invalid audience');
+            }
+          }
+          else{
             throw JWTInvalidError('invalid audience');
           }
         }
@@ -120,7 +131,7 @@ class JWT {
         return JWT(
           payload,
           header: header,
-          audience: payload.remove('aud'),
+          audience: _parseAud(payload.remove('aud')),
           issuer: payload.remove('iss'),
           subject: payload.remove('sub'),
           jwtId: payload.remove('jti'),
@@ -151,19 +162,19 @@ class JWT {
   dynamic payload;
 
   /// Audience claim
-  String audience;
+  Audience? audience;
 
   /// Subject claim
-  String subject;
+  String? subject;
 
   /// Issuer claim
-  String issuer;
+  String? issuer;
 
   /// JWT Id claim
-  String jwtId;
+  String? jwtId;
 
   /// JWT header
-  Map<String, dynamic> header;
+  Map<String, dynamic>? header;
 
   /// Sign and generate a new token.
   ///
@@ -175,13 +186,13 @@ class JWT {
   String sign(
     JWTKey key, {
     JWTAlgorithm algorithm = JWTAlgorithm.HS256,
-    Duration expiresIn,
-    Duration notBefore,
+    Duration? expiresIn,
+    Duration? notBefore,
     bool noIssueAt = false,
   }) {
     try {
       header ??= {};
-      header.addAll({'alg': algorithm.name, 'typ': 'dpop+jwt'});
+      header!.addAll({'alg': algorithm.name, 'typ': 'dpop+jwt'});
 
       if (payload is Map<String, dynamic> || payload is Map<dynamic, dynamic>) {
         try {
@@ -194,7 +205,7 @@ class JWT {
           if (notBefore != null) {
             payload['nbf'] = secondsSinceEpoch(DateTime.now().add(notBefore));
           }
-          if (audience != null) payload['aud'] = audience;
+          if (audience != null) payload['aud'] = audience!.toJson();
           if (subject != null) payload['sub'] = subject;
           if (issuer != null) payload['iss'] = issuer;
           if (jwtId != null) payload['jti'] = jwtId;
@@ -238,6 +249,52 @@ class JWT {
       } else {
         rethrow;
       }
+    }
+  }
+
+  static Audience? _parseAud(dynamic val) {
+    if (val is String) {
+      return Audience.one(val);
+    } else if (val is List<String>) {
+      return Audience(val);
+    } else {
+      return null;
+    }
+  }
+}
+
+/// Audience claim. Can contains one or more audience entry, used like a list
+///
+/// To get only one audience you can use `.first` getter (list cannot be empty)
+///
+/// To create a single audience you can use the factory `Audience.one('...')`.
+class Audience extends ListBase<String> {
+  Audience(this._audiences) : assert(_audiences.isNotEmpty);
+
+  factory Audience.one(String val) => Audience([val]);
+
+  final List<String> _audiences;
+
+  @override
+  int get length => _audiences.length;
+  @override
+  set length(int newLength) => _audiences.length = newLength;
+
+  @override
+  String operator [](int index) => _audiences[index];
+  @override
+  void operator []=(int index, String value) => _audiences[index] = value;
+
+  @override
+  void add(String value) => _audiences.add(value);
+  @override
+  void addAll(Iterable<String> all) => _audiences.addAll(all);
+
+  dynamic toJson() {
+    if (_audiences.length == 1) {
+      return first;
+    } else {
+      return _audiences;
     }
   }
 }

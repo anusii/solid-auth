@@ -205,7 +205,7 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
   }
 
   var tokenResponse = await authResponse.getTokenResponse();
-  String accessToken = tokenResponse.accessToken;
+  String? accessToken = tokenResponse.accessToken;
 
   /// Generate the logout URL
   final _logoutUrl = authResponse.generateLogoutUrl().toString();
@@ -225,23 +225,6 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
 
   return authData;
 }
-
-/// Logout function
-// Future<void> logout(_logoutUrl) async {
-//   if (currPlatform.isWeb()) {
-//     authManager.userLogout(_logoutUrl);
-//   }
-//   else{
-//     if (await canLaunch(_logoutUrl)) {
-//       await launch(_logoutUrl, forceWebView: true);
-//     } else {
-//       throw 'Could not launch $_logoutUrl';
-//     }
-//     await Future.delayed(Duration(seconds: 2));
-//     closeWebView();
-//   }
-  
-// }
 
 Future<bool> logout(_logoutUrl) async {
     

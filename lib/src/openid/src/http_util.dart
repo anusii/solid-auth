@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 
@@ -13,17 +12,17 @@ final _logger = Logger('openid_client');
 
 typedef ClientFactory = http.Client Function();
 
-Future get(dynamic url,
-    {Map<String, String> headers, @required http.Client client}) async {
+Future get(Uri url,
+    {Map<String, String>? headers, required http.Client? client}) async {
   return _processResponse(
       await _withClient((client) => client.get(url, headers: headers), client));
 }
 
-Future post(dynamic url,
-    {Map<String, String> headers,
+Future post(Uri url,
+    {Map<String, String>? headers,
     body,
-    Encoding encoding,
-    @required http.Client client}) async {
+    Encoding? encoding,
+    required http.Client? client}) async {
   return _processResponse(await _withClient(
       (client) =>
           client.post(url, headers: headers, body: body, encoding: encoding),
@@ -32,16 +31,26 @@ Future post(dynamic url,
 
 dynamic _processResponse(http.Response response) {
   _logger.fine(
-      '${response.request.method} ${response.request.url}: ${response.body}');
-  if (response.statusCode < 200 || response.statusCode >= 300) {
-    throw HttpRequestException(
-        statusCode: response.statusCode, body: json.decode(response.body));
+      '${response.request!.method} ${response.request!.url}: ${response.body}');
+  var contentType = response.headers.entries
+      .firstWhere((v) => v.key.toLowerCase() == 'content-type',
+          orElse: () => MapEntry('', ''))
+      .value;
+  var isJson = contentType.split(';').first == 'application/json';
+
+  var body = isJson ? json.decode(response.body) : response.body;
+  if (body is Map && body['error'] is String) {
+    throw OpenIdException(
+        body['error'], body['error_description'], body['error_uri']);
   }
-  return json.decode(response.body);
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw HttpRequestException(statusCode: response.statusCode, body: body);
+  }
+  return body;
 }
 
 Future<T> _withClient<T>(Future<T> Function(http.Client client) fn,
-    [http.Client client0]) async {
+    [http.Client? client0]) async {
   var client = client0 ?? http.Client();
   try {
     return await fn(client);
@@ -60,7 +69,7 @@ class AuthorizedClient extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     var token = await credential.getTokenResponse();
-    if (token.tokenType != null && token.tokenType.toLowerCase() != 'bearer') {
+    if (token.tokenType != null && token.tokenType!.toLowerCase() != 'bearer') {
       throw UnsupportedError('Unknown token type: ${token.tokenType}');
     }
 
@@ -70,10 +79,17 @@ class AuthorizedClient extends http.BaseClient {
   }
 }
 
+/// An exception thrown when a http request responds with a status code other
+/// than successful (2xx) and the response is not in the openid error format.
 class HttpRequestException implements Exception {
   final int statusCode;
 
   final dynamic body;
 
-  HttpRequestException({@required this.statusCode, this.body});
+  HttpRequestException({required this.statusCode, this.body});
+
+  @override
+  String toString() {
+    return 'HttpRequestException($statusCode): $body';
+  }
 }

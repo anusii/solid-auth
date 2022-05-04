@@ -36,9 +36,9 @@ class PrivateKey {
 
 /// KeyPair is the type of Ed25519 public/private key pair.
 class KeyPair {
-  final PrivateKey privateKey;
+  final PrivateKey? privateKey;
 
-  final PublicKey publicKey;
+  final PublicKey? publicKey;
 
   KeyPair({this.privateKey, this.publicKey});
 

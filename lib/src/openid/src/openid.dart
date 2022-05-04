@@ -12,6 +12,7 @@ import 'http_util.dart' as http;
 import 'model.dart';
 
 export 'model.dart';
+export 'http_util.dart' show HttpRequestException;
 
 /// Represents an OpenId Provider
 class Issuer {
@@ -26,7 +27,7 @@ class Issuer {
   Issuer(this.metadata, {this.claimsMap = const {}})
       : _keyStore = metadata.jwksUri == null
             ? JsonWebKeyStore()
-            : (JsonWebKeyStore()..addKeySetUrl(metadata.jwksUri));
+            : (JsonWebKeyStore()..addKeySetUrl(metadata.jwksUri!));
 
   /// Url of the facebook issuer.
   ///
@@ -50,7 +51,7 @@ class Issuer {
   static Uri firebase(String id) =>
       Uri.parse('https://securetoken.google.com/$id');
 
-  static final Map<Uri, Issuer> _discoveries = {
+  static final Map<Uri, Issuer?> _discoveries = {
     facebook: Issuer(OpenIdProviderMetadata.fromJson({
       'issuer': facebook.toString(),
       'authorization_endpoint': 'https://www.facebook.com/v2.8/dialog/oauth',
@@ -113,8 +114,8 @@ class Issuer {
   static Iterable<Uri> get knownIssuers => _discoveries.keys;
 
   /// Discovers the OpenId Provider's metadata based on its uri.
-  static Future<Issuer> discover(Uri uri, {http.Client httpClient}) async {
-    if (_discoveries[uri] != null) return _discoveries[uri];
+  static Future<Issuer> discover(Uri uri, {http.Client? httpClient}) async {
+    if (_discoveries[uri] != null) return _discoveries[uri]!;
 
     var segments = uri.pathSegments.toList();
     if (segments.isNotEmpty && segments.last.isEmpty) {
@@ -134,17 +135,17 @@ class Client {
   final String clientId;
 
   /// A secret for authenticating the client to the OP.
-  final String clientSecret;
+  final String? clientSecret;
 
   /// The [Issuer] representing the OP.
   final Issuer issuer;
 
-  final http.Client httpClient;
+  final http.Client? httpClient;
 
   Client(this.issuer, this.clientId, {this.clientSecret, this.httpClient});
 
   static Future<Client> forIdToken(String idToken,
-      {http.Client httpClient}) async {
+      {http.Client? httpClient}) async {
     var token = JsonWebToken.unverified(idToken);
     var claims = OpenIdClaims.fromJson(token.claims.toJson());
     var issuer = await Issuer.discover(claims.issuer, httpClient: httpClient);
@@ -157,12 +158,12 @@ class Client {
 
   /// Creates a [Credential] for this client.
   Credential createCredential(
-          {String accessToken,
-          String tokenType,
-          String refreshToken,
-          Duration expiresIn,
-          DateTime expiresAt,
-          String idToken}) =>
+          {String? accessToken,
+          String? tokenType,
+          String? refreshToken,
+          Duration? expiresIn,
+          DateTime? expiresAt,
+          String? idToken}) =>
       Credential._(
           this,
           TokenResponse.fromJson({
@@ -180,11 +181,14 @@ class Client {
 class Credential {
   TokenResponse _token;
   final Client client;
-  final String nonce;
+  final String? nonce;
+
+  final StreamController<TokenResponse> _onTokenChanged =
+      StreamController.broadcast();
 
   Credential._(this.client, this._token, this.nonce);
 
-  Map<String, dynamic> get response => _token.toJson();
+  Map<String, dynamic>? get response => _token.toJson();
 
   Future<UserInfo> getUserInfo() async {
     var uri = client.issuer.metadata.userinfoEndpoint;
@@ -193,6 +197,9 @@ class Credential {
     }
     return UserInfo.fromJson(await _get(uri));
   }
+
+  /// Emits a new [TokenResponse] every time the token is refreshed
+  Stream<TokenResponse> get onTokenChanged => _onTokenChanged.stream;
 
   /// Allows clients to notify the authorization server that a previously
   /// obtained refresh or access token is no longer needed
@@ -219,9 +226,8 @@ class Credential {
   /// between the logout request and the callback to [redirectUri].
   ///
   /// See https://openid.net/specs/openid-connect-rpinitiated-1_0.html
-  Uri generateLogoutUrl({Uri redirectUri, String state}) {
-    return client.issuer.metadata.endSessionEndpoint
-        ?.replace(queryParameters: {
+  Uri? generateLogoutUrl({Uri? redirectUri, String? state}) {
+    return client.issuer.metadata.endSessionEndpoint?.replace(queryParameters: {
       'id_token_hint': _token.idToken.toCompactSerialization(),
       if (redirectUri != null)
         'post_logout_redirect_uri': redirectUri.toString(),
@@ -229,7 +235,7 @@ class Credential {
     });
   }
 
-  http.Client createHttpClient([http.Client baseClient]) =>
+  http.Client createHttpClient([http.Client? baseClient]) =>
       http.AuthorizedClient(
           baseClient ?? client.httpClient ?? http.Client(), this);
 
@@ -267,19 +273,20 @@ class Credential {
             !(e is JoseException && e.message.startsWith('JWT expired.'))));
   }
 
-  String get refreshToken => _token.refreshToken;
+  String? get refreshToken => _token.refreshToken;
 
   Future<TokenResponse> getTokenResponse([bool forceRefresh = false]) async {
     if (!forceRefresh &&
         _token.accessToken != null &&
-        _token.expiresAt.isAfter(DateTime.now())) {
+        (_token.expiresAt == null ||
+            _token.expiresAt!.isAfter(DateTime.now()))) {
       return _token;
     }
     if (_token.accessToken == null && _token.refreshToken == null) {
       return _token;
     }
 
-    var json = await http.post(client.issuer.metadata.tokenEndpoint,
+    var json = await http.post(client.issuer.tokenEndpoint,
         body: {
           'grant_type': 'refresh_token',
           'token_type': 'DPoP',
@@ -294,10 +301,14 @@ class Credential {
           json['error'], json['error_description'], json['error_uri']);
     }
 
-    return _token = TokenResponse.fromJson(json);
+    //return _token = TokenResponse.fromJson(json);
+    _token =
+        TokenResponse.fromJson({'refresh_token': _token.refreshToken, ...json});
+    _onTokenChanged.add(_token);
+    return _token;
   }
 
-  Credential.fromJson(Map<String, dynamic> json, {http.Client httpClient})
+  Credential.fromJson(Map<String, dynamic> json, {http.Client? httpClient})
       : this._(
             Client(
                 Issuer(OpenIdProviderMetadata.fromJson(
@@ -317,6 +328,16 @@ class Credential {
       };
 }
 
+extension _IssuerX on Issuer {
+  Uri get tokenEndpoint {
+    var endpoint = metadata.tokenEndpoint;
+    if (endpoint == null) {
+      throw OpenIdException.missingTokenEndpoint();
+    }
+    return endpoint;
+  }
+}
+
 enum FlowType {
   implicit,
   authorizationCode,
@@ -327,7 +348,7 @@ enum FlowType {
 class Flow {
   final FlowType type;
 
-  final String responseType;
+  final String? responseType;
 
   final Client client;
 
@@ -335,16 +356,35 @@ class Flow {
 
   final String state;
 
+  final Map<String, String> _additionalParameters;
+
   String dPoPToken = '';
 
-  Uri redirectUri = Uri.parse('http://localhost');
+  //Uri redirectUri = Uri.parse('http://localhost');
+  Uri redirectUri;
 
-  Flow._(this.type, this.responseType, this.client, {String state})
-      : state = state ?? _randomString(20) {
-    //var scopes = client!.issuer!.metadata.scopesSupported; // There is no 'scopes_supported' in SOLID issuer response
-    List<String> scopes =  [];
-    for (var s in const ['openid', 'profile', 'offline_access']) {
-      if (scopes.contains(s)) {
+  // Flow._(this.type, this.responseType, this.client, {String? state})
+  //     : state = state ?? _randomString(20) {
+  //   //var scopes = client!.issuer!.metadata.scopesSupported; // There is no 'scopes_supported' in SOLID issuer response
+  //   List<String> scopes =  [];
+  //   for (var s in const ['openid', 'profile', 'offline_access']) {
+  //     if (scopes.contains(s)) {
+  //       this.scopes.add(s);
+  //       break;
+  //     }
+  //   }
+
+  Flow._(this.type, this.responseType, this.client,
+      {String? state,
+      Map<String, String>? additionalParameters,
+      Uri? redirectUri,
+      List<String> scopes = const ['openid', 'profile', 'email']})
+      : state = state ?? _randomString(20),
+        _additionalParameters = {...?additionalParameters},
+        redirectUri = redirectUri ?? Uri.parse('http://localhost') {
+    var supportedScopes = client.issuer.metadata.scopesSupported ?? [];
+    for (var s in scopes) {
+      if (supportedScopes.contains(s)) {
         this.scopes.add(s);
         break;
       }
@@ -360,13 +400,25 @@ class Flow {
     };
   }
 
-  Flow.authorizationCode(Client client, {String state})
-      : this._(FlowType.authorizationCode, 'code', client, state: state);
+  Flow.authorizationCode(Client client,
+      {String? state,
+      String? prompt,
+      String? accessType,
+      Uri? redirectUri,
+      List<String> scopes = const ['openid', 'profile', 'email']})
+      : this._(FlowType.authorizationCode, 'code', client,
+            state: state,
+            additionalParameters: {
+              if (prompt != null) 'prompt': prompt,
+              if (accessType != null) 'access_type': accessType,
+            },
+            scopes: scopes,
+            redirectUri: redirectUri);
 
-  Flow.authorizationCodeWithPKCE(Client client, {String state})
+  Flow.authorizationCodeWithPKCE(Client client, {String? state})
       : this._(FlowType.proofKeyForCodeExchange, 'code', client, state: state);
 
-  Flow.implicit(Client client, {String state})
+  Flow.implicit(Client client, {String? state})
       : this._(
             FlowType.implicit,
             ['token id_token', 'id_token token', 'id_token', 'token']
@@ -380,12 +432,13 @@ class Flow {
   Uri get authenticationUri => client.issuer.metadata.authorizationEndpoint
       .replace(queryParameters: _authenticationUriParameters);
 
-  Map<String, String> _proofKeyForCodeExchange;
+  late Map<String, String> _proofKeyForCodeExchange;
 
   final String _nonce = _randomString(16);
 
-  Map<String, String> get _authenticationUriParameters {
+  Map<String, String?> get _authenticationUriParameters {
     var v = {
+      ..._additionalParameters,
       'response_type': responseType,
       'scope': scopes.join(' '),
       'client_id': client.clientId,
@@ -393,7 +446,7 @@ class Flow {
       'response_mode': 'query',
       'state': state
     }..addAll(
-        responseType.split(' ').contains('id_token') ? {'nonce': _nonce} : {});
+        responseType!.split(' ').contains('id_token') ? {'nonce': _nonce} : {});
 
     if (type == FlowType.proofKeyForCodeExchange) {
       v.addAll({
@@ -404,11 +457,11 @@ class Flow {
     return v;
   }
 
-  Future<TokenResponse> _getToken(String code) async {
+  Future<TokenResponse> _getToken(String? code) async {
     var methods = client.issuer.metadata.tokenEndpointAuthMethodsSupported;
     var json;
     if (type == FlowType.jwtBearer) {
-      json = await http.post(client.issuer.metadata.tokenEndpoint,
+      json = await http.post(client.issuer.tokenEndpoint,
           body: {
             'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             'assertion': code,
@@ -418,7 +471,7 @@ class Flow {
 
       //var h = base64.encode(SHA256Digest().process(Uint8List.fromList('${client.clientId}:${client.clientSecret}'.codeUnits)));
       var h = base64.encode('${client.clientId}:${client.clientSecret}'.codeUnits);
-      json = await http.post(client.issuer.metadata.tokenEndpoint,
+      json = await http.post(client.issuer.tokenEndpoint,
           headers: {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -437,8 +490,8 @@ class Flow {
             'code_verifier': _proofKeyForCodeExchange['code_verifier']
           },
           client: client.httpClient);
-    } else if (methods.contains('client_secret_post')) {
-      json = await http.post(client.issuer.metadata.tokenEndpoint,
+    } else if (methods!.contains('client_secret_post')) {
+      json = await http.post(client.issuer.tokenEndpoint,
           body: {
             'grant_type': 'authorization_code',
             'code': code,
@@ -450,7 +503,7 @@ class Flow {
     } else if (methods.contains('client_secret_basic')) {
       var h = base64
           .encode('${client.clientId}:${client.clientSecret}'.codeUnits);
-      json = await http.post(client.issuer.metadata.tokenEndpoint,
+      json = await http.post(client.issuer.tokenEndpoint,
           headers: {'authorization': 'Basic $h'},
           body: {
             'grant_type': 'authorization_code',
@@ -497,15 +550,15 @@ String _randomString(int length) {
 
 class OpenIdException implements Exception {
   /// An error code
-  final String code;
+  final String? code;
 
   /// Human-readable text description of the error.
-  final String message;
+  final String? message;
 
   /// A URI identifying a human-readable web page with information about the
   /// error, used to provide the client developer with additional information
   /// about the error.
-  final String uri;
+  final String? uri;
 
   static const _defaultMessages = {
     'duplicate_requests':
@@ -556,7 +609,15 @@ class OpenIdException implements Exception {
         'The value of one of the Client Metadata fields is invalid and the server has rejected this request. Note that an Authorization Server MAY choose to substitute a valid value for any requested parameter of a Client\'s Metadata.',
   };
 
-  OpenIdException(this.code, String message, [this.uri])
+  /// Thrown when trying to get a token, but the token endpoint is missing from
+  /// the issuer metadata
+  const OpenIdException.missingTokenEndpoint()
+      : this._('missing_token_endpoint',
+            'The issuer metadata does not contain a token endpoint.');
+
+  const OpenIdException._(this.code, this.message) : uri = null;
+
+  OpenIdException(this.code, String? message, [this.uri])
       : message = message ?? _defaultMessages[code];
 
   @override

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'const.dart';
 
 class FieldElement {
-  List<int> innerList;
+  late List<int> innerList;
   FieldElement() {
     innerList = List<int>.generate(10, (index) => 0);
   }

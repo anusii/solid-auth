@@ -6,7 +6,7 @@ import 'auth_manager_abstract.dart';
 import 'package:solid_auth/src/openid/openid_client_browser.dart';
 import 'package:openidconnect_web/openidconnect_web.dart';
 
-Window windowLoc;
+late Window windowLoc;
 
 class WebAuthManager implements AuthManager {
 
@@ -33,7 +33,7 @@ class WebAuthManager implements AuthManager {
   }
 
   String getKeyValue(String key) {
-    return windowLoc.localStorage[key];
+    return windowLoc.localStorage[key]!;
   }
 
   userLogout(String logoutUrl){

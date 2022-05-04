@@ -15,7 +15,7 @@ class SecretKey extends JWTKey {
 
 /// For EdDSA algorithm, in sign method
 class EdDSAPrivateKey extends JWTKey {
-  ed.PrivateKey key;
+  late ed.PrivateKey key;
 
   EdDSAPrivateKey(List<int> bytes) {
     key = ed.PrivateKey(bytes);
@@ -24,7 +24,7 @@ class EdDSAPrivateKey extends JWTKey {
 
 /// For EdDSA algorithm, in verify method
 class EdDSAPublicKey extends JWTKey {
-  ed.PublicKey key;
+  late ed.PublicKey key;
 
   EdDSAPublicKey(List<int> bytes) {
     key = ed.PublicKey(bytes);
@@ -33,7 +33,7 @@ class EdDSAPublicKey extends JWTKey {
 
 /// For RSA algorithm, in sign method
 class RSAPrivateKey extends JWTKey {
-  pc.RSAPrivateKey key;
+  late pc.RSAPrivateKey key;
 
   RSAPrivateKey(String pem) {
     final _key = parseRSAPrivateKeyPEM(pem);
@@ -44,7 +44,7 @@ class RSAPrivateKey extends JWTKey {
 
 /// For RSA algorithm, in verify method
 class RSAPublicKey extends JWTKey {
-  pc.RSAPublicKey key;
+  late pc.RSAPublicKey key;
 
   RSAPublicKey(String pem) {
     final _key = parseRSAPublicKeyPEM(pem);
@@ -55,8 +55,8 @@ class RSAPublicKey extends JWTKey {
 
 /// For ECDSA algorithm, in sign method
 class ECPrivateKey extends JWTKey {
-  pc.ECPrivateKey key;
-  int size;
+  late pc.ECPrivateKey key;
+  late int size;
 
   ECPrivateKey(String pem) {
     final _key = parseECPrivateKeyPEM(pem);
@@ -74,7 +74,7 @@ class ECPrivateKey extends JWTKey {
 
 /// For ECDSA algorithm, in verify method
 class ECPublicKey extends JWTKey {
-  pc.ECPublicKey key;
+  late pc.ECPublicKey key;
 
   ECPublicKey(String pem) {
     final _key = parseECPublicKeyPEM(pem);
