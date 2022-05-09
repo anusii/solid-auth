@@ -88,7 +88,7 @@ String genDpopToken(String endPointUrl, KeyPair rsaKeyPair,
 }
 
 /// The authentication function
-Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
+Future<Map> authenticate(Uri issuerUri, List<String> scopes, BuildContext context) async {
 
   /// Platform type parameter
   String platformType;
@@ -165,8 +165,14 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
   if(platformType != 'web'){
     /// Create a function to open a browser with an url
     urlLauncher(String url) async {
-      if (await canLaunch(url)) {
-        await launch(url, forceWebView: true, enableJavaScript: true);
+      // if (await canLaunch(url)) {
+      //   await launch(url, forceWebView: true, enableJavaScript: true);
+      // } else {
+      //   throw 'Could not launch $url';
+      // }
+
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
       } else {
         throw 'Could not launch $url';
       }
@@ -185,7 +191,8 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
     /// starts the authentication + authorisation process
     authResponse = await authenticator.authorize();
     /// close the webview when finished
-    closeWebView();
+    //closeWebView();
+    closeInAppWebView();
 
   }
   else{
@@ -194,7 +201,9 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
                         scopes, dPopToken);
 
     var oidc = authManager.getOidcWeb();
-    var callbackUri = await oidc.authorizeInteractive(title: 'authProcess',
+    var callbackUri = await oidc.authorizeInteractive(
+                            context: context,
+                            title: 'authProcess',
                             authorizationUrl: authenticator.flow.authenticationUri.toString(),
                             redirectUrl: redirUrl,
                             popupWidth: 700,
@@ -227,14 +236,17 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes) async {
 }
 
 Future<bool> logout(_logoutUrl) async {
-    
-  if (await canLaunch(_logoutUrl)) {
-    await launch(_logoutUrl, forceWebView: true);
+  Uri url = Uri.parse(_logoutUrl);
+  
+  if (await canLaunchUrl(url)) {
+    //await launch(_logoutUrl, forceWebView: true);
+    await launchUrl(url);
   } else {
-    throw 'Could not launch $_logoutUrl';
+    throw 'Could not launch $url';
   }
 
   await Future.delayed(Duration(seconds: 4));
-  closeWebView();
+  //closeWebView();
+  closeInAppWebView();
   return true;
 }

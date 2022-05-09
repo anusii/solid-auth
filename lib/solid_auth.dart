@@ -6,6 +6,7 @@ import 'dart:convert';
 
 /// Package imports:
 import 'package:http/http.dart' as http;
+import 'package:flutter/widgets.dart';
 import 'package:solid_auth/src/openid/openid_client.dart';
 import 'package:solid_auth/src/jwt/dart_jsonwebtoken.dart';
 import 'package:uuid/uuid.dart';

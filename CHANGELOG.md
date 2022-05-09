@@ -20,3 +20,7 @@ Initial version of the package
 ## 0.1.4
 
 * Package updated to null safety
+
+## 0.1.5
+
+* Bug fix on web authentication

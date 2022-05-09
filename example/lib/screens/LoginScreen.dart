@@ -209,7 +209,7 @@ class LoginScreen extends StatelessWidget {
 
             // Authentication process for the POD issuer
             var authData = await authenticate(
-                Uri.parse(_issuerUri), _scopes);
+                Uri.parse(_issuerUri), _scopes, context);
 
             // Decode access token to get the correct webId
             String accessToken = authData['accessToken'];
