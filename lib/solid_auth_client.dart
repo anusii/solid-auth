@@ -192,7 +192,7 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes, BuildContext contex
     authResponse = await authenticator.authorize();
     /// close the webview when finished
     //closeWebView();
-    closeInAppWebView();
+    // closeInAppWebView();
 
   }
   else{
@@ -247,6 +247,6 @@ Future<bool> logout(_logoutUrl) async {
 
   await Future.delayed(Duration(seconds: 4));
   //closeWebView();
-  closeInAppWebView();
+  // closeInAppWebView();
   return true;
 }
