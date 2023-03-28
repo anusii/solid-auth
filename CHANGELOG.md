@@ -24,3 +24,7 @@ Initial version of the package
 ## 0.1.5
 
 * Bug fix on web authentication
+
+## 0.1.56
+
+* Removing closeWebView for windows

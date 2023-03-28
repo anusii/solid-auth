@@ -191,8 +191,9 @@ Future<Map> authenticate(Uri issuerUri, List<String> scopes, BuildContext contex
     /// starts the authentication + authorisation process
     authResponse = await authenticator.authorize();
     /// close the webview when finished
+    /// closing web view function does not work in Windows applications
     //closeWebView();
-    closeInAppWebView();
+    //closeInAppWebView();
 
   }
   else{
@@ -246,6 +247,7 @@ Future<bool> logout(_logoutUrl) async {
   }
 
   await Future.delayed(Duration(seconds: 4));
+  /// closing web view function does not work in Windows applications
   //closeWebView();
   closeInAppWebView();
   return true;
