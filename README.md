@@ -94,7 +94,3 @@ String dPopToken = genDpopToken(endPointUrl, rsaKeyPair, publicKeyJwk, httpMetho
 ## Additional information
 
 The source code can be accessed via [GitHub repository](https://github.com/anusii/solid_auth). You can also file issues you face at [GitHub Issues](https://github.com/anusii/solid_auth/issues).
-
-<!-- TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more. -->
