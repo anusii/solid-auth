@@ -28,3 +28,8 @@ Initial version of the package
 ## 0.1.6
 
 * Removing closeWebView for windows
+
+## 0.1.7
+
+* closeWebView only for mobile (Android and ios)
+* Authentication now works with localhost

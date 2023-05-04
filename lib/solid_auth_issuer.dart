@@ -3,13 +3,14 @@ part of solid_auth;
 /// Get POD issuer URI
 Future<String> getIssuer(String textUrl) async {
   String _issuerUri = '';
-  if(textUrl.contains('profile/card#me')){
+  if (textUrl.contains('profile/card#me')) {
     String pubProf = await fetchProfileData(textUrl);
     _issuerUri = getIssuerUri(pubProf);
   }
 
-  if(_issuerUri == ''){
-    RegExp exp = RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w\.]+');
+  if (_issuerUri == '') {
+    /// This reg expression works with localhost and other urls
+    RegExp exp = RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+(\.|\:)[\w\.]+');
     Iterable<RegExpMatch> matches = exp.allMatches(textUrl);
     matches.forEach((match) {
       _issuerUri = textUrl.substring(match.start, match.end);
@@ -20,10 +21,12 @@ Future<String> getIssuer(String textUrl) async {
 
 /// Get public profile information from webId
 Future<String> fetchProfileData(String profUrl) async {
-  final response = await http.get(Uri.parse(profUrl),
-  headers: <String, String>{
-    'Content-Type': 'text/turtle',
-    },);
+  final response = await http.get(
+    Uri.parse(profUrl),
+    headers: <String, String>{
+      'Content-Type': 'text/turtle',
+    },
+  );
 
   if (response.statusCode == 200) {
     /// If the server did return a 200 OK response,
@@ -37,7 +40,7 @@ Future<String> fetchProfileData(String profUrl) async {
 }
 
 /// Read public profile RDF file and get the issuer URI
-String getIssuerUri(String profileRdfStr){
+String getIssuerUri(String profileRdfStr) {
   String issuerUri = '';
   var profileDataList = profileRdfStr.split('\n');
   for (var i = 0; i < profileDataList.length; i++) {
@@ -46,7 +49,7 @@ String getIssuerUri(String profileRdfStr){
       var itemList = dataItem.split(';');
       for (var j = 0; j < itemList.length; j++) {
         String item = itemList[j];
-        if(item.contains('solid:oidcIssuer')){
+        if (item.contains('solid:oidcIssuer')) {
           var issuerUriDivide = item.replaceAll(' ', '').split('<');
           issuerUri = issuerUriDivide[1].replaceAll('>', '');
         }
