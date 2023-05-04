@@ -14,11 +14,16 @@ class Authenticator {
   Authenticator._(this.flow) : credential = _credentialFromUri(flow);
 
   // With PKCE flow
-  Authenticator(Client client, {Iterable<String> scopes = const [], popToken = '',})
-      : this._(Flow.authorizationCodeWithPKCE(client,
+  Authenticator(
+    Client client, {
+    Iterable<String> scopes = const [],
+    popToken = '',
+  }) : this._(Flow.authorizationCodeWithPKCE(client,
             state: window.localStorage['openid_client:state'])
           ..scopes.addAll(scopes)
-          ..redirectUri = Uri.parse(window.location.href.replaceAll('#/', 'callback.html')).removeFragment()
+          ..redirectUri =
+              Uri.parse(window.location.href.replaceAll('#/', 'callback.html'))
+                  .removeFragment()
           ..dPoPToken = popToken);
 
   void authorize() {
@@ -27,6 +32,7 @@ class Authenticator {
     window.location.href = flow.authenticationUri.toString();
   }
 
+  // ignore: unused_field
   static final Map<String, Completer<Map<String, String>>> _requestsByState =
       {};
 
