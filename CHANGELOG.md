@@ -33,3 +33,7 @@ Initial version of the package
 
 * closeWebView only for mobile (Android and ios)
 * Authentication now works with localhost
+
+## 0.1.8
+
+* Fix package version dependency issue

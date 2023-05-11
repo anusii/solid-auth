@@ -1,6 +1,6 @@
 name: solid_auth
 description: Authentication library to connect to a Solid server from solidproject.org
-version: 0.1.7
+version: 0.1.8
 homepage: https://github.com/anusii/solid_auth
 
 environment:
@@ -17,7 +17,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   jose: ^0.3.2
   logging: ^1.0.2
-  intl: ^0.17.0
+  intl: ^0.18.0
   fast_rsa: ^3.0.3
   uuid: ^3.0.4
   openidconnect_platform_interface: ^1.0.3
