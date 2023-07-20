@@ -37,3 +37,11 @@ Initial version of the package
 ## 0.1.8
 
 * Fix package version dependency issue
+
+## 0.1.9
+
+* Changes to the Android side of the authentication
+
+## 0.1.10
+
+* Changes to the Android side of the authentication 

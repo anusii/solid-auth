@@ -22,11 +22,10 @@ part 'solid_auth_client.dart';
 part 'solid_auth_issuer.dart';
 
 /// Set port number to be used in localhost
-const int _port = 4400; 
+const int _port = 4400;
 
 /// To get platform information
 PlatformInfo currPlatform = PlatformInfo();
 
 /// Initialise authentication manager
-AuthManager authManager = AuthManager();  
-
+AuthManager authManager = AuthManager();
