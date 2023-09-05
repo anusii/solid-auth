@@ -21,9 +21,10 @@ class Authenticator {
   }) : this._(Flow.authorizationCodeWithPKCE(client,
             state: window.localStorage['openid_client:state'])
           ..scopes.addAll(scopes)
-          ..redirectUri =
-              Uri.parse(window.location.href.replaceAll('#/', 'callback.html'))
-                  .removeFragment()
+          ..redirectUri = Uri.parse(window.location.href.contains('#/')
+                  ? window.location.href.replaceAll('#/', 'callback.html')
+                  : window.location.href + 'callback.html')
+              .removeFragment()
           ..dPoPToken = popToken);
 
   void authorize() {

@@ -44,4 +44,8 @@ Initial version of the package
 
 ## 0.1.10
 
-* Changes to the Android side of the authentication 
+* Changes to the Android side of the authentication
+
+## 0.1.11
+
+* Web version callback uri bug fix

@@ -9,25 +9,28 @@ import 'package:openidconnect_web/openidconnect_web.dart';
 late Window windowLoc;
 
 class WebAuthManager implements AuthManager {
-
   WebAuthManager() {
     windowLoc = window;
     // storing something initially just to make sure it works.
     windowLoc.localStorage["MyKey"] = "I am from web local storage";
   }
 
-  String getWebUrl(){
-    return window.location.href.replaceAll('#/', 'callback.html');
+  String getWebUrl() {
+    if (window.location.href.contains('#/')) {
+      return window.location.href.replaceAll('#/', 'callback.html');
+    } else {
+      return (window.location.href + 'callback.html');
+    }
   }
 
-  Authenticator createAuthenticator(Client client, List<String> scopes, String dPopToken){
-    var authenticator = new Authenticator(client, 
-                        scopes: scopes, 
-                        popToken: dPopToken);
+  Authenticator createAuthenticator(
+      Client client, List<String> scopes, String dPopToken) {
+    var authenticator =
+        new Authenticator(client, scopes: scopes, popToken: dPopToken);
     return authenticator;
   }
 
-  OpenIdConnectWeb getOidcWeb(){
+  OpenIdConnectWeb getOidcWeb() {
     OpenIdConnectWeb oidc = OpenIdConnectWeb();
     return oidc;
   }
@@ -36,7 +39,7 @@ class WebAuthManager implements AuthManager {
     return windowLoc.localStorage[key]!;
   }
 
-  userLogout(String logoutUrl){
+  userLogout(String logoutUrl) {
     final child = window.open(logoutUrl, "user_logout");
     child.close();
   }
