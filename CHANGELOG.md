@@ -49,3 +49,7 @@ Initial version of the package
 ## 0.1.11
 
 * Web version callback uri bug fix
+
+## 0.1.12
+
+* Update http package to the latest version
