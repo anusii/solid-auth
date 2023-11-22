@@ -53,3 +53,7 @@ Initial version of the package
 ## 0.1.12
 
 * Update http package to the latest version
+
+## 0.1.13
+
+* Update the supported platforms
