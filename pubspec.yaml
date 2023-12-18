@@ -24,6 +24,8 @@ dependencies:
   openidconnect_platform_interface: ^1.0.3
   openidconnect_web: ^1.0.21
   clock: ^1.1.0
+  rdflib: ^0.2.8
+  flutter_secure_storage: ^9.0.0
   flutter:
     sdk: flutter
 
@@ -49,7 +51,6 @@ platforms:
 
 # The following section is specific to Flutter.
 flutter:
-
   # To add assets to your package, add an assets section, like this:
   assets:
     - packages/fast_rsa/web/assets/worker.js
