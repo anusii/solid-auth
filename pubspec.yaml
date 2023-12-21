@@ -8,24 +8,28 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  pointycastle: ^3.5.0
-  http: ^1.1.0
+  clock: ^1.1.0
   convert: ^3.0.1
   collection: ^1.15.0
   crypto: ^3.0.1
-  url_launcher: ^6.1.12
-  url_launcher_android: ^6.0.36
-  jwt_decoder: ^2.0.1
-  jose: ^0.3.2
-  logging: ^1.0.2
-  intl: ^0.18.0
+  flutter_riverpod: ^2.4.9
+  flutter_secure_storage: ^9.0.0
+  flutter_svg: ^2.0.9
   fast_rsa: ^3.0.3
-  uuid: ^3.0.4
+  http: ^1.1.0
+  intl: ^0.18.0
+  jose: ^0.3.2
+  jwt_decoder: ^2.0.1
+  loading_indicator: ^3.1.1
+  logging: ^1.0.2
   openidconnect_platform_interface: ^1.0.3
   openidconnect_web: ^1.0.21
-  clock: ^1.1.0
+  pointycastle: ^3.5.0
+  package_info_plus: ^5.0.1
   rdflib: ^0.2.8
-  flutter_secure_storage: ^9.0.0
+  url_launcher: ^6.1.12
+  url_launcher_android: ^6.0.36
+  uuid: ^3.0.4
   flutter:
     sdk: flutter
 
