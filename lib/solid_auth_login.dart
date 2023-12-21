@@ -5,7 +5,7 @@ typedef AuthWidgetBuilder = Widget Function(
 
 class PodLoginScreen extends StatefulWidget {
   final String serverURL;
-  final String solidPageURL;
+  final String? solidPageURL;
   final String solidProjectURL;
   final String pageHeader;
   final ImageProvider backgroundImage;
@@ -16,7 +16,7 @@ class PodLoginScreen extends StatefulWidget {
   const PodLoginScreen(
       {Key? key,
       required this.serverURL,
-      required this.solidPageURL,
+      this.solidPageURL,
       required this.solidProjectURL,
       required this.pageHeader,
       required this.backgroundImage,
@@ -111,10 +111,11 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
                           padding: EdgeInsets.all(30),
                           child: Column(
                             children: [
-                              widget.svgPic != null
+                              widget.svgPic != null &&
+                                      widget.solidPageURL != null
                                   ? GestureDetector(
                                       onTap: () => launchUrl(
-                                          Uri.parse(widget.solidPageURL)),
+                                          Uri.parse(widget.solidPageURL!)),
                                       child: Container(
                                         height: 180,
                                         margin:
@@ -378,5 +379,3 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
     );
   }
 }
-
-
