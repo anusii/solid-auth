@@ -58,3 +58,5 @@ String getIssuerUri(String profileRdfStr) {
   }
   return issuerUri;
 }
+
+

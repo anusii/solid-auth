@@ -1,15 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:solid_auth/src/login/utils/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
-import 'package:solid_auth/src/login/utils/constants.dart';
-import 'package:solid_auth/solid_auth.dart';
-import 'package:solid_auth/src/models/rest_api.dart' as restApi;
-
-
+part of solid_auth;
 
 typedef AuthWidgetBuilder = Widget Function(
     BuildContext context, Map authData, String webId);
