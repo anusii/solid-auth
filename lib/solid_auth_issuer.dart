@@ -19,6 +19,7 @@ Future<String> getIssuer(String textUrl) async {
   return _issuerUri;
 }
 
+
 /// Get public profile information from webId
 Future<String> fetchProfileData(String profUrl) async {
   final response = await http.get(
@@ -58,5 +59,3 @@ String getIssuerUri(String profileRdfStr) {
   }
   return issuerUri;
 }
-
-

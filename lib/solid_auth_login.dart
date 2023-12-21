@@ -378,3 +378,24 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
     );
   }
 }
+
+Widget loginPage(
+    String serverURL,
+    String solidPageURL,
+    String solidProjectURL,
+    String pageHeader,
+    ImageProvider backgroundImage,
+    SvgPicture? svgPic,
+    Image? assetImage,
+    Color cardColor,
+    List<AuthWidgetBuilder> widgetBuilders) {
+  return PodLoginScreen(
+    serverURL: serverURL,
+    solidPageURL: solidPageURL,
+    solidProjectURL: solidProjectURL,
+    pageHeader: pageHeader,
+    backgroundImage: backgroundImage,
+    cardColor: cardColor,
+    widgetBuilders: widgetBuilders,
+  );
+}
