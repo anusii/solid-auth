@@ -9,15 +9,19 @@ import 'package:solid_auth/src/login/utils/constants.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_auth/src/models/rest_api.dart' as restApi;
 
+typedef AuthWidgetBuilder = Widget Function(
+    BuildContext context, Map authData, String webId);
+
 class PodLoginScreen extends StatefulWidget {
   final String serverURL;
   final String solidPageURL;
   final String solidProjectURL;
   final String pageHeader;
   final ImageProvider backgroundImage;
-  final SvgPicture svgPic;
+  final SvgPicture? svgPic;
+  final Image? assetImage;
   final Color cardColor;
-  final List<WidgetBuilder> widgetBuilders;
+  final List<AuthWidgetBuilder> widgetBuilders;
   const PodLoginScreen(
       {Key? key,
       required this.serverURL,
@@ -25,7 +29,8 @@ class PodLoginScreen extends StatefulWidget {
       required this.solidProjectURL,
       required this.pageHeader,
       required this.backgroundImage,
-      required this.svgPic,
+      this.svgPic,
+      this.assetImage,
       required this.cardColor,
       required this.widgetBuilders})
       : super(key: key);
@@ -115,15 +120,19 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
                           padding: EdgeInsets.all(30),
                           child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: () =>
-                                    launchUrl(Uri.parse(widget.solidPageURL)),
-                                child: Container(
-                                  height: 180,
-                                  margin: EdgeInsets.only(left: 0, right: 20),
-                                  child: widget.svgPic,
-                                ),
-                              ),
+                              widget.svgPic != null
+                                  ? GestureDetector(
+                                      onTap: () => launchUrl(
+                                          Uri.parse(widget.solidPageURL)),
+                                      child: Container(
+                                        height: 180,
+                                        margin:
+                                            EdgeInsets.only(left: 0, right: 20),
+                                        child: widget.svgPic,
+                                      ),
+                                    )
+                                  : Container(),
+                              widget.assetImage ?? Container(),
                               Divider(height: 15, thickness: 2),
                               SizedBox(
                                 height: 20,
@@ -265,8 +274,8 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
     TextEditingController _webIdTextController,
     List<String> FOLDERS,
     Map FILES,
-    WidgetBuilder existConditionBuilder,
-    WidgetBuilder noExistsConditionBuilder,
+    AuthWidgetBuilder existConditionBuilder,
+    AuthWidgetBuilder noExistsConditionBuilder,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -323,11 +332,8 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
 
               final List<String> _scopes = <String>[
                 'openid',
-                //'webid',
                 'profile',
-                //'email',
                 'offline_access',
-                //'api'
               ];
 
               var authData =
@@ -338,7 +344,7 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
               //var rsaKeyPair = rsaInfo['rsa'];
               //var publicKeyJwk = rsaInfo['pubKeyJwk'];
 
-              /// Perform check to see whether all required resources exists
+              /// Perform check to see whether all required resources exists.
               List resCheckList =
                   await restApi.initialStructureTest(authData, FOLDERS, FILES);
               bool allExists = resCheckList.first;
@@ -348,14 +354,20 @@ class _PodLoginScreenState extends State<PodLoginScreen> {
 
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: existConditionBuilder),
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => existConditionBuilder(
+                        context, authData, _webIdTextController.text),
+                  ),
                   (Route<dynamic> route) =>
                       false, // This predicate ensures all previous routes are removed
                 );
               } else {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: noExistsConditionBuilder),
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => noExistsConditionBuilder(
+                        context, authData, _webIdTextController.text),
+                  ),
                 );
               }
             },
