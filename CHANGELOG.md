@@ -57,3 +57,7 @@ Initial version of the package
 ## 0.1.13
 
 * Update the supported platforms
+
+## 0.1.14
+
+* Change `intl` package version to latest
