@@ -1,25 +1,27 @@
 part of solid_auth;
 
 /// Dynamically register the user in the POD server
-Future<String> clientDynamicReg(
-    String regEndPoint, List reidirUrlList, String authMethod) async {
-  final response = await http.post(Uri.parse(regEndPoint),
+Future<String> clientDynamicReg(String regEndpoint, List reidirUrlList,
+    String authMethod, List scopes) async {
+  final response = await http.post(Uri.parse(regEndpoint),
       headers: <String, String>{
         'Accept': '*/*',
         'Content-Type': 'application/json',
         'Connection': 'keep-alive',
         'Accept-Encoding': 'gzip, deflate, br',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'cross-site',
+        // 'Sec-Fetch-Dest': 'empty',
+        // 'Sec-Fetch-Mode': 'cors',
+        // 'Sec-Fetch-Site': 'cross-site',
       },
       body: json.encode({
         "application_type": "web",
+        "scope": scopes.join(' '),
+        "grant_types": ["authorization_code", "refresh_token"],
+        "redirect_uris": reidirUrlList,
+        "token_endpoint_auth_method": authMethod,
         //"client_name": "fluttersolidauth",
         //"id_token_signed_response_alg": "RS256",
-        "redirect_uris": reidirUrlList,
         //"subject_type": "pairwise",
-        "token_endpoint_auth_method": authMethod,
         //"userinfo_encrypted_response_alg": "RSA1_5",
         //"userinfo_encrypted_response_enc": "A128CBC-HS256",
       }));
@@ -118,8 +120,8 @@ Future<Map> authenticate(
   Issuer issuer = await Issuer.discover(issuerUri);
 
   /// Get end point URIs
-  String regEndPoint = issuer.metadata['registration_endpoint'];
-  String tokenEndPoint = issuer.metadata['token_endpoint'];
+  String regEndpoint = issuer.metadata['registration_endpoint'];
+  String tokenEndpoint = issuer.metadata['token_endpoint'];
   var authMethods = issuer.metadata['token_endpoint_auth_methods_supported'];
 
   if (authMethods is String) {
@@ -142,7 +144,7 @@ Future<Map> authenticate(
 
   /// Dynamic registration of the client (our app)
   var regResponse =
-      await clientDynamicReg(regEndPoint, redirUriList, authMethod);
+      await clientDynamicReg(regEndpoint, redirUriList, authMethod, scopes);
 
   /// Decode the registration details
   var regResJson = jsonDecode(regResponse);
@@ -154,7 +156,7 @@ Future<Map> authenticate(
 
   ///Generate DPoP token using the RSA private key
   String dPopToken =
-      genDpopToken(tokenEndPoint, rsaKeyPair, publicKeyJwk, "POST");
+      genDpopToken(tokenEndpoint, rsaKeyPair, publicKeyJwk, "POST");
 
   final String _clientId = regResJson['client_id'];
   final String _clientSecret = regResJson['client_secret'];
@@ -212,6 +214,12 @@ Future<Map> authenticate(
     var regResponse = Uri.parse(callbackUri).queryParameters;
     authResponse = await authenticator.flow.callback(regResponse);
   }
+
+  /// The following function call first check if the existing access token
+  /// is expired or not.
+  /// If its not expired then returns the token data as a token object
+  /// If expired then run the refresh token and get a new token and
+  /// returns the new token data as a token object
 
   var tokenResponse = await authResponse.getTokenResponse();
   String? accessToken = tokenResponse.accessToken;

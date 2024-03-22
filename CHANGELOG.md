@@ -61,3 +61,7 @@ Initial version of the package
 ## 0.1.14
 
 * Change `intl` package version to latest
+
+## 0.1.145
+
+* Getting `refresh_token` using OIDC flow

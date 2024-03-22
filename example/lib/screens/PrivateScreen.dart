@@ -6,6 +6,7 @@ import 'package:fluttersolidauth/models/Responsive.dart';
 import 'package:fluttersolidauth/screens/PrivateProfile.dart';
 import 'package:fluttersolidauth/models/Constants.dart';
 
+// ignore: must_be_immutable
 class PrivateScreen extends StatelessWidget {
   Map authData; // Authentication data
   String webId; // User WebId

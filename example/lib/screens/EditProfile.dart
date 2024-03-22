@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:jwt_decoder/jwt_decoder.dart';
+//import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:solid_auth/solid_auth.dart';
 
 // Project imports:
@@ -133,8 +133,8 @@ class _EditProfileState extends State<EditProfile> {
                                     // Get access token
                                     String accessToken =
                                         widget.authData['accessToken'];
-                                    Map<String, dynamic> decodedToken =
-                                        JwtDecoder.decode(accessToken);
+                                    // Map<String, dynamic> decodedToken =
+                                    //     JwtDecoder.decode(accessToken);
 
                                     // Get RSA public/private key pair
                                     var rsaKeyPair = rsaInfo['rsa'];
@@ -235,6 +235,7 @@ class _EditProfileState extends State<EditProfile> {
                                                 dPopToken,
                                                 updateQuery);
                                         numOfUpdates += 1;
+                                        assert(updateResponse != '');
                                       }
                                     }
 
@@ -252,8 +253,8 @@ class _EditProfileState extends State<EditProfile> {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      primary: lightGold, // background
-                                      onPrimary: darkGold, // foreground
+                                      foregroundColor: darkGold,
+                                      backgroundColor: lightGold, // foreground
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 50),
                                       shape: RoundedRectangleBorder(
@@ -342,7 +343,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 textButtonTheme: TextButtonThemeData(
                   style: TextButton.styleFrom(
-                    primary: Colors.red, // button text color
+                    foregroundColor: Colors.red, // button text color
                   ),
                 ),
               ),

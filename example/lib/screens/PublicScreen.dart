@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttersolidauth/models/Responsive.dart';
 import 'package:fluttersolidauth/screens/PublicProfile.dart';
 
+// ignore: must_be_immutable
 class PublicScreen extends StatelessWidget {
   String webId;
 

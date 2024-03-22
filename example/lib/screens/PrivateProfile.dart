@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:jwt_decoder/jwt_decoder.dart';
+//import 'package:jwt_decoder/jwt_decoder.dart';
 //import 'package:websafe_svg/websafe_svg.dart';
 
 // Project imports:
@@ -90,9 +90,9 @@ class _PrivateProfileState extends State<PrivateProfile> {
     String profOrg =
         podProfile.getPersonalInfo('organization-name'); // Get organisation
     String profCoun = podProfile.getPersonalInfo('country-name'); // Get country
-    String profReg = podProfile.getPersonalInfo('region'); // Get state
-    String profAddId =
-        podProfile.getAddressId('hasAddress'); // Get hasAddress flag
+    // String profReg = podProfile.getPersonalInfo('region'); // Get state
+    // String profAddId =
+    //     podProfile.getAddressId('hasAddress'); // Get hasAddress flag
 
     // Set up correct profile picture url
     String picUrl = webId;
@@ -150,7 +150,7 @@ class _PrivateProfileState extends State<PrivateProfile> {
     var publicKeyJwk = rsaInfo['pubKeyJwk'];
 
     String accessToken = authData['accessToken'];
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+    //Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
 
     // Get profile
     String profCardUrl = webId.replaceAll('#me', '');

@@ -98,7 +98,9 @@ class Authenticator {
 }
 
 void _runBrowser(String url) {
-  if ((defaultTargetPlatform == TargetPlatform.linux) || (defaultTargetPlatform == TargetPlatform.macOS) || (defaultTargetPlatform == TargetPlatform.windows)) {
+  if ((defaultTargetPlatform == TargetPlatform.linux) ||
+      (defaultTargetPlatform == TargetPlatform.macOS) ||
+      (defaultTargetPlatform == TargetPlatform.windows)) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.linux:
         Process.run('x-www-browser', [url]);
@@ -110,8 +112,7 @@ void _runBrowser(String url) {
         Process.run('chrome', [url]);
         break;
       default:
-        throw UnsupportedError(
-            'Unsupported platform: $defaultTargetPlatform');
+        throw UnsupportedError('Unsupported platform: $defaultTargetPlatform');
     }
   }
 }

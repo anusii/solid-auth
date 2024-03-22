@@ -292,8 +292,7 @@ class Credential {
           'token_type': 'DPoP',
           'refresh_token': _token.refreshToken,
           'client_id': client.clientId,
-          if (client.clientSecret != null)
-            'client_secret': client.clientSecret
+          if (client.clientSecret != null) 'client_secret': client.clientSecret
         },
         client: client.httpClient);
     if (json['error'] != null) {
@@ -378,15 +377,14 @@ class Flow {
       {String? state,
       Map<String, String>? additionalParameters,
       Uri? redirectUri,
-      List<String> scopes = const ['openid', 'profile', 'email']})
+      List<String> scopes = const ['openid', 'profile', 'offline_access']})
       : state = state ?? _randomString(20),
         _additionalParameters = {...?additionalParameters},
         redirectUri = redirectUri ?? Uri.parse('http://localhost') {
     var supportedScopes = client.issuer.metadata.scopesSupported ?? [];
     for (var s in scopes) {
-      if (supportedScopes.contains(s)) {
-        this.scopes.add(s);
-        break;
+      if (!supportedScopes.contains(s)) {
+        this.scopes.remove(s);
       }
     }
 
@@ -405,7 +403,7 @@ class Flow {
       String? prompt,
       String? accessType,
       Uri? redirectUri,
-      List<String> scopes = const ['openid', 'profile', 'email']})
+      List<String> scopes = const ['openid', 'profile', 'offline_access']})
       : this._(FlowType.authorizationCode, 'code', client,
             state: state,
             additionalParameters: {
@@ -443,7 +441,7 @@ class Flow {
       'scope': scopes.join(' '),
       'client_id': client.clientId,
       'redirect_uri': redirectUri.toString(),
-      'response_mode': 'query',
+      'prompt': 'consent',
       'state': state
     }..addAll(
         responseType!.split(' ').contains('id_token') ? {'nonce': _nonce} : {});
@@ -468,23 +466,22 @@ class Flow {
           },
           client: client.httpClient);
     } else if (type == FlowType.proofKeyForCodeExchange) {
-
-      //var h = base64.encode(SHA256Digest().process(Uint8List.fromList('${client.clientId}:${client.clientSecret}'.codeUnits)));
-      var h = base64.encode('${client.clientId}:${client.clientSecret}'.codeUnits);
+      var h =
+          base64.encode('${client.clientId}:${client.clientSecret}'.codeUnits);
       json = await http.post(client.issuer.tokenEndpoint,
           headers: {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
-            'DPoP': dPoPToken,
+            //'DPoP': dPoPToken,
             'content-type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic $h',
-            'Connection': 'keep-alive',
+            //'Connection': 'keep-alive',
           },
           body: {
             'grant_type': 'authorization_code',
             'code': code,
             'redirect_uri': redirectUri.toString(),
-            'client_id': client.clientId,
+            //'client_id': client.clientId,
             // if (client.clientSecret != null)
             //   'client_secret': client.clientSecret,
             'code_verifier': _proofKeyForCodeExchange['code_verifier']
@@ -501,8 +498,8 @@ class Flow {
           },
           client: client.httpClient);
     } else if (methods.contains('client_secret_basic')) {
-      var h = base64
-          .encode('${client.clientId}:${client.clientSecret}'.codeUnits);
+      var h =
+          base64.encode('${client.clientId}:${client.clientSecret}'.codeUnits);
       json = await http.post(client.issuer.tokenEndpoint,
           headers: {'authorization': 'Basic $h'},
           body: {
@@ -545,7 +542,8 @@ class Flow {
 String _randomString(int length) {
   var r = Random.secure();
   var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  return Iterable.generate(length, (_) => chars[r.nextInt(chars.length)]).join();
+  return Iterable.generate(length, (_) => chars[r.nextInt(chars.length)])
+      .join();
 }
 
 class OpenIdException implements Exception {

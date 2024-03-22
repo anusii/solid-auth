@@ -10,6 +10,7 @@ import 'package:fluttersolidauth/models/Responsive.dart';
 import 'package:fluttersolidauth/screens/LoginScreen.dart';
 
 // Widget for the top horizontal bar
+// ignore: must_be_immutable
 class Header extends StatelessWidget {
   var mainDrawer;
   String logoutUrl;
