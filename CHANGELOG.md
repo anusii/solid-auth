@@ -62,6 +62,10 @@ Initial version of the package
 
 * Change `intl` package version to latest
 
-## 0.1.145
+## 0.1.15
 
 * Getting `refresh_token` using OIDC flow
+
+## 0.1.16
+
+* Inlcude `DPoP` token in token request

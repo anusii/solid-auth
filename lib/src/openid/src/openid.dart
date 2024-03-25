@@ -472,7 +472,7 @@ class Flow {
           headers: {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
-            //'DPoP': dPoPToken,
+            'DPoP': dPoPToken,
             'content-type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic $h',
             //'Connection': 'keep-alive',
