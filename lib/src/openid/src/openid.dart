@@ -275,7 +275,8 @@ class Credential {
 
   String? get refreshToken => _token.refreshToken;
 
-  Future<TokenResponse> getTokenResponse([bool forceRefresh = false]) async {
+  Future<TokenResponse> getTokenResponse(
+      {bool forceRefresh = false, String dPoPToken = ''}) async {
     if (!forceRefresh &&
         _token.accessToken != null &&
         (_token.expiresAt == null ||
@@ -286,13 +287,22 @@ class Credential {
       return _token;
     }
 
+    var h =
+        base64.encode('${client.clientId}:${client.clientSecret}'.codeUnits);
+
+    ///Generate DPoP token using the RSA private key
     var json = await http.post(client.issuer.tokenEndpoint,
+        headers: {
+          'Accept': '*/*',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'content-type': 'application/x-www-form-urlencoded',
+          'DPoP': dPoPToken,
+          'Authorization': 'Basic $h',
+        },
         body: {
           'grant_type': 'refresh_token',
           'token_type': 'DPoP',
           'refresh_token': _token.refreshToken,
-          'client_id': client.clientId,
-          if (client.clientSecret != null) 'client_secret': client.clientSecret
         },
         client: client.httpClient);
     if (json['error'] != null) {

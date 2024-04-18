@@ -69,3 +69,7 @@ Initial version of the package
 ## 0.1.16
 
 * Inlcude `DPoP` token in token request
+
+## 0.1.17
+
+* Inlcude `DPoP` token in refresh token request
