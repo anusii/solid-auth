@@ -116,8 +116,13 @@ Future<Map> authenticate(
     platformType = 'desktop';
   }
 
+  print('i am here1');
+  print(issuerUri);
+
   /// Get issuer metatada
   Issuer issuer = await Issuer.discover(issuerUri);
+
+  print('i am here2');
 
   /// Get end point URIs
   String regEndpoint = issuer.metadata['registration_endpoint'];
