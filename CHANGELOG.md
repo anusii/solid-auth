@@ -1,3 +1,8 @@
+## 0.1.19
+
+* Fix lint issues
+* Support up-to-date dependencies
+
 ## 0.1.18
 
 * Update `uuid` package version

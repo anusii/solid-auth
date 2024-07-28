@@ -1,4 +1,4 @@
-part of solid_auth;
+part of 'solid_auth.dart';
 
 /// Dynamically register the user in the POD server
 Future<String> clientDynamicReg(String regEndpoint, List reidirUrlList,
