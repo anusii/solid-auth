@@ -1,4 +1,4 @@
-part of solid_auth;
+part of 'solid_auth.dart';
 
 /// Get POD issuer URI
 Future<String> getIssuer(String textUrl) async {

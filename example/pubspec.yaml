@@ -21,7 +21,7 @@ environment:
   sdk: ">=3.0.0-0 <4.0.0"
 
 dependencies:
-  url_launcher: ^6.0.10
+  url_launcher: ^6.3.0
   jwt_decoder: ^2.0.1
   intl: ^0.19.0
   jaguar_jwt: ^3.0.0
