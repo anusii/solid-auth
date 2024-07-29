@@ -1,3 +1,7 @@
+### 0.1.21
+
+* Fix dart formatting issues
+
 ### 0.1.20
 
 * Fix dart formatting issues
