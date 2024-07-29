@@ -1,6 +1,6 @@
 name: solid_auth
 description: Authentication library to connect to a Solid server from solidproject.org
-version: 0.1.19
+version: 0.1.20
 homepage: https://github.com/anusii/solid_auth
 
 environment:
