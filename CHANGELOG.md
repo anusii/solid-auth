@@ -1,3 +1,7 @@
+### 0.1.22
+
+* Url launcher code update for Android authentication
+
 ### 0.1.21
 
 * Fix dart formatting issues

@@ -160,21 +160,14 @@ Future<Map> authenticate(
 
   final String _clientId = regResJson['client_id'];
   final String _clientSecret = regResJson['client_secret'];
+
   var client = Client(issuer, _clientId, clientSecret: _clientSecret);
 
   if (platformType != 'web') {
     /// Create a function to open a browser with an url
-    urlLauncher(String url) async {
-      // if (await canLaunch(url)) {
-      //   await launch(url, forceWebView: true, enableJavaScript: true);
-      // } else {
-      //   throw 'Could not launch $url';
-      // }
-
-      if (await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url));
-      } else {
-        throw 'Could not launch $url';
+    Future<void> urlLauncher(String url) async {
+      if (!await launchUrl(Uri.parse(url))) {
+        throw Exception('Could not launch $url');
       }
     }
 
