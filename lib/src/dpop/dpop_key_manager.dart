@@ -33,6 +33,8 @@ library;
 import 'package:fast_rsa/fast_rsa.dart';
 import 'package:logging/logging.dart';
 
+import 'package:solid_auth/src/dpop/dpop_token_generator.dart';
+
 final _log = Logger('solid_auth.DpopKeyManager');
 
 /// Manages the RSA key pair used for DPoP proofs.
@@ -96,12 +98,14 @@ class DpopKeyManager {
   /// Use on logout or to rotate the DPoP binding key.
   static Future<DpopKeyManager> rotate() async {
     _instance = null;
+    DpopTokenGenerator.clearCachedSigningKey();
     return getInstance();
   }
 
   /// Clears the cached instance (call on logout).
   static void clear() {
     _instance = null;
+    DpopTokenGenerator.clearCachedSigningKey();
   }
 
   /// Restores the singleton from previously persisted PEM-encoded keys.
