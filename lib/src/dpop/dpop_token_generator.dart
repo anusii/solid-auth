@@ -183,42 +183,12 @@ abstract class DpopTokenGenerator {
 
     /// Sign the JWT using private key
     return jwt.sign(
-      _signingKeyFor(keyPair.privateKey),
+      RSAPrivateKey(keyPair.privateKey),
       algorithm: JWTAlgorithm.RS256,
     );
   }
 
-  /// Forget the cached signing key.
-  static void clearCachedSigningKey() {
-    _cachedPrivateKeyPem = null;
-    _cachedSigningKey = null;
-  }
-
   // ── Internal ───────────────────────────────────────────────────────────────
-
-  static String? _cachedPrivateKeyPem;
-  static RSAPrivateKey? _cachedSigningKey;
-
-  /// The parsed signing key for [privateKeyPem], reusing the last one.
-  ///
-  /// Every protected-resource request carries its own DPoP proof, so this runs
-  /// once per HTTP request. Building an [RSAPrivateKey] re-decodes the PEM and
-  /// its ASN.1 structure each time, which is pure Dart arbitrary-precision
-  /// work and is markedly slower on the web and on low-powered devices than on
-  /// a desktop. The key pair changes only on login or rotation, so parse it
-  /// once and keep it.
-  static RSAPrivateKey _signingKeyFor(String privateKeyPem) {
-    final cached = _cachedSigningKey;
-    if (cached != null && _cachedPrivateKeyPem == privateKeyPem) {
-      return cached;
-    }
-
-    final key = RSAPrivateKey(privateKeyPem);
-    _cachedPrivateKeyPem = privateKeyPem;
-    _cachedSigningKey = key;
-
-    return key;
-  }
 
   /// Returns the base64url-encoded SHA-256 hash of [input] (ASCII encoded).
   /// Used for the `ath` claim per RFC 9449 §4.2.
